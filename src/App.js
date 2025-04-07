@@ -8,7 +8,8 @@ import { useState } from 'react';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tasks, setTasks] = useState([]);
+  const [todoTasks, setTodoTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [filterText, setFilterText] = useState("");
 
@@ -19,17 +20,19 @@ function App() {
       description,
       completed: false
     };
-    setTasks([...tasks, newTask]);
+    setTodoTasks([...todoTasks, newTask]);
   };
 
   const toggleComplete = (taskId) => {
-    setTasks(tasks.map(task => {
-      if (task.id === taskId) {
-        return { ...task, completed: !task.completed };
-      } else {
-        return task;
-      }
-    }));
+    const taskInTodo = todoTasks.find(task => task.id === taskId);
+    if (taskInTodo) {
+      setTodoTasks(todoTasks.filter(task => task.id !== taskId));
+      setCompletedTasks([...completedTasks, { ...taskInTodo, completed: true }]);
+    } else {
+      const taskInCompleted = completedTasks.find(task => task.id === taskId);
+      setCompletedTasks(completedTasks.filter(task => task.id !== taskId));
+      setTodoTasks([...todoTasks, { ...taskInCompleted, completed: false }]);
+    }
   };
 
   const confirmDeleteTask = (taskId) => {
@@ -37,11 +40,16 @@ function App() {
   };
 
   const deleteTask = () => {
-    setTasks(tasks.filter(task => task.id !== taskToDelete));
+    setTodoTasks(todoTasks.filter(task => task.id !== taskToDelete));
+    setCompletedTasks(completedTasks.filter(task => task.id !== taskToDelete));
     setTaskToDelete(null); 
   };
 
-  const filteredTasks = tasks.filter(task => 
+  const filteredTodoTasks = todoTasks.filter(task =>
+    task.title.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const filteredCompletedTasks = completedTasks.filter(task =>
     task.title.toLowerCase().includes(filterText.toLowerCase())
   );
 
@@ -63,7 +71,8 @@ function App() {
       </div>
 
       <TaskPanel 
-      tasks={filteredTasks} 
+      todoTasks={filteredTodoTasks} 
+      completedTasks={filteredCompletedTasks}
       onToggleComplete={toggleComplete} 
       onDeleteTask={confirmDeleteTask} />
 

@@ -1,10 +1,8 @@
 import React from "react";
 import TaskList from "./tasklist";
 
-const TaskPanel = ({ tasks, onToggleComplete, onDeleteTask }) => {
-  const todoTasks = tasks.filter(task => !task.completed);
-  const completedTasks = tasks.filter(task => task.completed);
-
+const TaskPanel = ({ todoTasks, completedTasks, onToggleComplete, onDeleteTask }) => {
+  
   return (
     <div className="space-y-6 p-6">
       <TaskList 
