@@ -7,8 +7,8 @@ const Header = () => {
       <header className="header bg-white border-b border-gray-300 shadow-md">
           <div className="header-title">
             
-            <h1 className="text-2xl font-bold">My Tasks</h1>
-              <p className="text-gray-500 text-sm">Here’s a list of your tasks for the day!</p>
+            <h1 className="text-2xl font-bold">My tasks</h1>
+              <p className="text-gray-500 text-base">Here’s a list of your tasks for the day!</p>
           </div>
         <img
           src={avatar}

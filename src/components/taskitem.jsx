@@ -1,4 +1,5 @@
 import React from "react";
+import icon from '../images/1483063.png';
 
 const TaskItem = ({ task, onToggleComplete, onDeleteTask }) => {
   return (
@@ -18,7 +19,7 @@ const TaskItem = ({ task, onToggleComplete, onDeleteTask }) => {
         </div>
       </div>
       <button className="bg-red-500 text-white p-1 rounded" onClick={onDeleteTask}>
-        Delete
+      <img src={icon} alt="Delete" className="w-5 h-5" />
       </button>
     </div>
   );

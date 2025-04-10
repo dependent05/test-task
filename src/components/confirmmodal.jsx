@@ -10,10 +10,10 @@ const ConfirmModal = ({ isOpen, onCancel, onConfirm }) => {
         <p className="text-gray-500">Are you sure you want to delete this task?</p>
 
         <div className="flex justify-end mt-4">
-          <button className="bg-gray-200 px-4 py-2 rounded mr-2" onClick={onCancel}>
+          <button className="bg-gray-200 px-4 py-2 rounded-lg mr-2" onClick={onCancel}>
             Cancel
           </button>
-          <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={onConfirm}>
+          <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={onConfirm}>
             Delete
           </button>
         </div>

@@ -20,10 +20,10 @@ function App() {
       description,
       completed: false
     };
-    setTodoTasks([...todoTasks, newTask]);
+    setTodoTasks(curr => [...curr, newTask]);
   };
 
-  const toggleComplete = (taskId) => {
+  const toggleComplete = (taskId) => { 
     const taskInTodo = todoTasks.find(task => task.id === taskId);
     if (taskInTodo) {
       setTodoTasks(todoTasks.filter(task => task.id !== taskId));
@@ -34,15 +34,18 @@ function App() {
       setTodoTasks([...todoTasks, { ...taskInCompleted, completed: false }]);
     }
   };
-
-  const confirmDeleteTask = (taskId) => {
-    setTaskToDelete(taskId); 
+  
+  const confirmDeleteTask = (taskId, isCompleted) => {
+    setTaskToDelete({ id: taskId, isCompleted }); 
   };
-
+  
   const deleteTask = () => {
-    setTodoTasks(todoTasks.filter(task => task.id !== taskToDelete));
-    setCompletedTasks(completedTasks.filter(task => task.id !== taskToDelete));
-    setTaskToDelete(null); 
+    if (taskToDelete.isCompleted) {
+      setCompletedTasks(curr => curr.filter(task => task.id !== taskToDelete.id));
+    } else {
+      setTodoTasks(curr => curr.filter(task => task.id !== taskToDelete.id));
+    }
+    setTaskToDelete(null);
   };
 
   const filteredTodoTasks = todoTasks.filter(task =>
@@ -56,15 +59,15 @@ function App() {
   return (
     <>
       <Header />
-      <div className="flex justify-between mt-3 mr-7 ml-7"> 
+      <div className="flex justify-between mt-8 mr-20 ml-20 pt-6 pr-6 pl-6 pb-2"> 
         <input
          type="text" 
          placeholder="Filter tasks..." 
-         className="p-1 border rounded w-48"
+         className="p-1 border rounded-lg w-56 h-10"
          value={filterText} 
          onChange={(e) => setFilterText(e.target.value)} 
          />
-        <button className="bg-black text-white p-1 rounded w-24 block"
+        <button className="bg-black text-white p-1 rounded-lg w-28 h-10 block"
           onClick={() => setIsModalOpen(true)}> 
           + Add Task
         </button>
@@ -72,6 +75,7 @@ function App() {
 
       <TaskPanel 
       todoTasks={filteredTodoTasks} 
+      onAddTask={() => setIsModalOpen(true)}
       completedTasks={filteredCompletedTasks}
       onToggleComplete={toggleComplete} 
       onDeleteTask={confirmDeleteTask} />

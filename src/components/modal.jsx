@@ -42,7 +42,7 @@ function Modal({ isOpen, onClose, onAddTask }) {
           />
         </label>
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-between mt-4">
           <button type="button" className="bg-gray-200 px-4 py-2 rounded mr-2" onClick={onClose}>Cancel</button>
           <button type="submit" className="bg-black text-white px-4 py-2 rounded">Deploy</button>
         </div>
