@@ -17,34 +17,41 @@ function Modal({ isOpen, onClose, onAddTask }) {
   };
 
   return (
-    <form className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onSubmit={handleSubmit}>
-      <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-xl font-bold">Create task</h2>
-        <p className="text-gray-500">Deploy your new task in one-click.</p>
+    <form className="fixed inset-0 bg-zinc-950/20 flex justify-center items-center z-50" onSubmit={handleSubmit}>
+      <div className="w-[369px] rounded-lg border p-6 flex flex-col gap-6 bg-white border-zinc-100 shadow-sm">
+        <div className="w-full flex flex-col gap-1.5">
+          <p style={{ lineHeight: "100%" }} className="font-semibold font-sans text-2xl tracking-[-0.4px] text-zinc-950">Create task</p>
+          <p className="font-normal text-sm text-zinc-500 font-sans">Deploy your new task in one-click.</p>
+        </div>
 
-        <label className="block mt-4">
-          <span className="font-semibold">Task*</span>
-          <input 
-            className="w-full border p-2 rounded mt-1" 
-            placeholder="Name of your task"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </label>
+        <div className="w-full flex flex-col gap-4">
+          <div className="w-full flex flex-col gap-2">
+            <label htmlFor="title" style={{ lineHeight: "100%" }} className="font-medium font-sans text-sm text-zinc-900">Task*</label>
+            <input
+              className="w-full h-10 rounded-md border py-2 px-3 font-normal text-sm text-zinc-500 font-sans"
+              placeholder="Name of your task"
+              id="title"
+              required
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
 
-        <label className="block mt-2">
-          <span className="font-semibold">Description</span>
-          <input 
-            className="w-full border p-2 rounded mt-1" 
-            placeholder="Optional"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </label>
+          <div className="w-full flex flex-col gap-2">
+            <label htmlFor="description" style={{ lineHeight: "100%" }} className="font-medium font-sans text-sm text-zinc-900">Description</label>
+            <input
+              className="w-full h-10 rounded-md border py-2 px-3 font-normal text-sm text-zinc-500 font-sans"
+              placeholder="Optional"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+        </div>
 
-        <div className="flex justify-between mt-4">
-          <button type="button" className="bg-gray-200 px-4 py-2 rounded mr-2" onClick={onClose}>Cancel</button>
-          <button type="submit" className="bg-black text-white px-4 py-2 rounded">Deploy</button>
+        <div className="w-full flex justify-between">
+          <button type="button" className="h-10 rounded-md border py-2 font-sans px-4 bg-white border-zinc-200 text-zinc-900" onClick={onClose}>Cancel</button>
+          <button type="submit" className="h-10 rounded-md py-2 px-4 font-sans bg-zinc-900 text-zinc-50">Deploy</button>
         </div>
       </div>
     </form>

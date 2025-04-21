@@ -3,15 +3,29 @@ import './index.css';
 import Header from './components/header';
 import Modal from './components/modal';
 import TaskPanel from './components/taskpanel';
-import ConfirmModal from './components/confirmmodal';
-import { useState } from 'react';
+import icon from './images/plus.png';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [todoTasks, setTodoTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
-  const [taskToDelete, setTaskToDelete] = useState(null);
   const [filterText, setFilterText] = useState("");
+
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("todoTasks");
+    const savedCompleted = localStorage.getItem("completedTasks");
+
+    if (savedTasks) setTodoTasks(JSON.parse(savedTasks));
+    if (savedCompleted) setCompletedTasks(JSON.parse(savedCompleted));
+  }, []);
+
+
+  useEffect(() => {
+    localStorage.setItem("todoTasks", JSON.stringify(todoTasks));
+    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+  }, [todoTasks, completedTasks]);
 
   const addTask = (title, description) => {
     const newTask = {
@@ -23,7 +37,7 @@ function App() {
     setTodoTasks(curr => [...curr, newTask]);
   };
 
-  const toggleComplete = (taskId) => { 
+  const toggleComplete = (taskId) => {
     const taskInTodo = todoTasks.find(task => task.id === taskId);
     if (taskInTodo) {
       setTodoTasks(todoTasks.filter(task => task.id !== taskId));
@@ -34,18 +48,13 @@ function App() {
       setTodoTasks([...todoTasks, { ...taskInCompleted, completed: false }]);
     }
   };
-  
-  const confirmDeleteTask = (taskId, isCompleted) => {
-    setTaskToDelete({ id: taskId, isCompleted }); 
-  };
-  
-  const deleteTask = () => {
-    if (taskToDelete.isCompleted) {
-      setCompletedTasks(curr => curr.filter(task => task.id !== taskToDelete.id));
+
+  const deleteTask = (taskId, isCompleted) => {
+    if (isCompleted) {
+      setCompletedTasks(curr => curr.filter(task => task.id !== taskId));
     } else {
-      setTodoTasks(curr => curr.filter(task => task.id !== taskToDelete.id));
+      setTodoTasks(curr => curr.filter(task => task.id !== taskId));
     }
-    setTaskToDelete(null);
   };
 
   const filteredTodoTasks = todoTasks.filter(task =>
@@ -57,39 +66,43 @@ function App() {
   );
 
   return (
-    <>
+    <div className='antialiased'>
       <Header />
-      <div className="flex justify-between mt-8 mr-20 ml-20 pt-6 pr-6 pl-6 pb-2"> 
-        <input
-         type="text" 
-         placeholder="Filter tasks..." 
-         className="p-1 border rounded-lg w-56 h-10"
-         value={filterText} 
-         onChange={(e) => setFilterText(e.target.value)} 
-         />
-        <button className="bg-black text-white p-1 rounded-lg w-28 h-10 block"
-          onClick={() => setIsModalOpen(true)}> 
-          + Add Task
-        </button>
+      <div className="mt-8 px-4 xl:px-32 pb-8 w-full">
+        <div className='w-full h-full flex flex-col gap-4 xl:min-w-[487px]'>
+          <div className='flex justify-between w-full'>
+            <input
+              type="text"
+              placeholder="Filter tasks..."
+              className="w-[166px] xl:w-[250px] max-w-sm h-10 rounded-md border py-2 px-3 font-sans font-normal text-sm border-zinc-200 text-zinc-500"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+            />
+            <button className="h-10 rounded-md py-2 px-4 inline-flex gap-2 bg-neutral-900 items-center"
+              onClick={() => setIsModalOpen(true)}>
+              <img
+                src={icon}
+                alt="Add Task"
+                className="w-4 h-4"
+              />
+              <p style={{ letterSpacing: "0%" }} className='text-sm font-medium font-sans text-center text-zinc-50'>Add Task</p>
+            </button>
+          </div>
+
+          <TaskPanel
+            todoTasks={filteredTodoTasks}
+            onAddTask={() => setIsModalOpen(true)}
+            completedTasks={filteredCompletedTasks}
+            onToggleComplete={toggleComplete}
+            onDeleteTask={deleteTask} />
+        </div>
       </div>
 
-      <TaskPanel 
-      todoTasks={filteredTodoTasks} 
-      onAddTask={() => setIsModalOpen(true)}
-      completedTasks={filteredCompletedTasks}
-      onToggleComplete={toggleComplete} 
-      onDeleteTask={confirmDeleteTask} />
-
-      <Modal 
-      isOpen={isModalOpen} 
-      onClose={() => setIsModalOpen(false)} 
-      onAddTask={addTask} />
-
-      <ConfirmModal 
-      isOpen={taskToDelete !== null} 
-      onCancel={() => setTaskToDelete(null)} 
-      onConfirm={deleteTask} />
-    </>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddTask={addTask} />
+    </div>
   );
 }
 

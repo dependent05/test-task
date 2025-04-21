@@ -4,7 +4,7 @@ import TaskList from "./tasklist";
 const TaskPanel = ({ todoTasks, onAddTask, completedTasks, onToggleComplete, onDeleteTask }) => {
   
   return (
-    <div className="space-y-6 p-6">
+    <>
       <TaskList 
         title="TODO" 
         tasks={todoTasks} 
@@ -22,7 +22,7 @@ const TaskPanel = ({ todoTasks, onAddTask, completedTasks, onToggleComplete, onD
         emptyMessage="Today you don’t have completed tasks"
         subEmptyMessage='Try to complete this: "Feed the hedgehog"'
       />
-    </div>
+      </>
   );
 };
 

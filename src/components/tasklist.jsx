@@ -2,44 +2,47 @@ import React from "react";
 import TaskItem from "./taskitem";
 
 const TaskList = ({ title, tasks, onAddTask, onToggleComplete, onDeleteTask, emptyMessage, subEmptyMessage }) => (
-    <div className="rounded-lg p-6 bg-gray-50 mr-20 ml-20 min-h-[350px] border-b border-gray-300 shadow-md">
-      <h2 className="text-sm text-gray-500 uppercase font-bold tracking-widest mb-4 flex items-center">
-        {title} 
-        <span className="ml-2 bg-gray-100 text-gray-500 text-sm font-bold px-2 py-1 rounded my-auto">
-          {tasks.length}
-        </span>
-      </h2>
-      {tasks.length === 0 ? (
-        <>
-        <p className="text-black text-3xl text-center font-bold mt-16">
+  <div className={'w-full rounded-2xl border p-8 flex flex-col gap-4 bg-zinc-100/40 border-zinc-200 shadow-md ' + (tasks.length === 0 ? "min-h-[314px]" : "h-min")}>
+    <h3 className="flex flex-row gap-3 items-center">
+      <p style={{ lineHeight: "14px" }} className="font-bold font-sans text-sm text-zinc-500">
+        {title}
+      </p>
+      <p className="px-1 rounded bg-zinc-100 font-bold font-sans text-sm text-zinc-500">
+        {tasks.length}
+      </p>
+    </h3>
+    {tasks.length === 0 ? (
+      <div className="w-full h-full flex flex-col items-center gap-1 pt-6 xl:pt-8 xl:has-[:checked]:pt-16">
+        <input type="checkbox" className="hidden" checked={title !== "TODO"} />
+        <p className="font-bold text-2xl font-sans text-center text-zinc-900">
           {emptyMessage}
         </p>
-        <p className="text-center text-base text-gray-400 mt-1">
+        <p className="font-normal text-sm font-sans text-center text-zinc-500">
           {subEmptyMessage}
         </p>
         {title === "TODO" && onAddTask && (
-            <button
-              className="mt-4 bg-black text-white p-2 rounded-lg w-28 h-10 block mx-auto"
-              onClick={onAddTask}
-            >
-              + Add Task
+          <div className="pt-4">
+            <button className="h-10 rounded-md py-2 px-4 bg-zinc-900"
+              onClick={onAddTask}>
+              <p style={{ letterSpacing: "0%" }} className='font-medium font-sans text-sm text-center text-zinc-50'>Add Task</p>
             </button>
-          )}
-    
-       </>
-      ) : (
-        <div className="space-y-3 mt-4">
-          {tasks.map(task => (
-            <TaskItem 
-              key={task.id} 
-              task={task} 
-              onToggleComplete={() => onToggleComplete(task.id)} 
-              onDeleteTask={() => onDeleteTask(task.id, task.completed)} 
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+          </div>
+        )}
+
+      </div>
+    ) : (
+      <>
+        {tasks.map(task => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            onToggleComplete={() => onToggleComplete(task.id)}
+            onDeleteTask={() => onDeleteTask(task.id, task.completed)}
+          />
+        ))}
+      </>
+    )}
+  </div>
+);
 
   export default TaskList;
